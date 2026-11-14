@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maverick Salazar | Portfolio</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-color: #0a0e17;
+            --surface-bg: rgba(16, 22, 34, 0.75);
+            --surface-hover: rgba(23, 31, 48, 0.9);
+            --border-color: rgba(56, 189, 248, 0.15);
+            --border-glow: rgba(56, 189, 248, 0.5);
+            --accent-color: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.2);
+            --text-main: #f0f6fc;
+            --text-muted: #8b949e;
+            --tag-bg: rgba(22, 27, 34, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: clip;
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            /* Tech-Savvy Cyber Grid & Ambient Glow Background */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 40%),
+                linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+            background-attachment: fixed;
+        }
+
+        /* Header Navigation Bar */
+        .header-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding: 1rem clamp(1.25rem, 4vw, 4rem);
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: fixed;
+            inset: 0 0 auto;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-logo::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 0.55rem 1.1rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background-color: var(--tag-bg);
+            border-color: var(--border-color);
+        }
+
+        .tab-btn.active {
+            color: #0a0e17;
+            background-color: var(--accent-color);
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Main Content Container */
+        .main-wrapper {
+            flex: 1;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 8rem clamp(1.25rem, 5vw, 5rem) 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fading Background Graphic Overlay for Welcome & About */
+        .bg-fade-graphic {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 55%;
+            height: 100%;
+            background-image: url('https://lh3.googleusercontent.com/d/180WWqDd8VQ941hzdRQyjb60sZh-NowfI=s800');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 80%);
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 80%);
+            transform: scale(1.15);
+            transition: transform 0.5s ease;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideUpFade 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(18px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* 1. Welcome Tab Split Hero */
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 4rem;
+            width: 100%;
+        }
+
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.75rem, 6vw, 4.75rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            background: linear-gradient(180deg, #ffffff 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-muted);
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.55rem 1.1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            margin-top: 0.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        /* Floating Profile Card with Glassmorphism */
+        .hero-profile-card {
+            background: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 2.75rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+            animation: float 6s ease-in-out infinite;
+            transition: border-color 300ms ease, box-shadow 300ms ease;
+        }
+
+        .hero-profile-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 30px 70px rgba(56, 189, 248, 0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .hero-profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { left: 200%; }
+        }
+
+        .profile-pic-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+            margin-bottom: 1.25rem;
+            background-color: var(--tag-bg);
+            transition: transform 300ms ease, border-color 300ms ease;
+        }
+
+        .hero-profile-card:hover .profile-pic-container {
+            transform: scale(1.04);
+            border-color: var(--accent-color);
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-class-badge {
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.2));
+            color: var(--accent-color);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-school {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* Generic Section Headings */
+        .section-title {
+            font-size: 2.1rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            max-width: 850px;
+            margin-bottom: 3rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+            gap: clamp(1rem, 2vw, 1.5rem);
+            width: 100%;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            background-color: var(--tag-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: monospace;
+            transition: all 200ms ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            background-color: rgba(56, 189, 248, 0.08);
+        }
+
+        .card {
+            background: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.25rem;
+            backdrop-filter: blur(12px);
+            transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--border-glow);
+            background-color: var(--surface-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.12);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .card p {
+            font-size: 0.98rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Social Link Grid */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            background: var(--surface-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 250ms ease;
+        }
+
+        .social-button:hover {
+            background-color: var(--accent-color);
+            color: #0a0e17;
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
+        }
+
+        @media (max-width: 900px) {
+            .hero-layout {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            .hero-text {
+                align-items: center;
+            }
+            .hero-profile-card {
+                max-width: 360px;
+                margin: 0 auto;
+            }
+            .bg-fade-graphic {
+                width: 100%;
+                opacity: 0.12;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 0.8rem 1.25rem;
+            }
+            .nav-tabs {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.1rem;
+            }
+            .tab-btn {
+                flex: 0 0 auto;
+            }
+            .main-wrapper { padding: 9.5rem 1.25rem 2rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .hero-profile-card { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <header class="header-nav">
+        <div class="brand-logo">&lt;/&gt; Maverick</div>
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" onclick="switchTab('welcome', this)">Welcome</button>
+            <button class="tab-btn" onclick="switchTab('about', this)">About Me</button>
+            <button class="tab-btn" onclick="switchTab('achievements', this)">Achievements</button>
+            <button class="tab-btn" onclick="switchTab('contact', this)">Contacts & Profiles</button>
+        </nav>
+    </header>
+
+    <!-- Main Full-Width Content Container -->
+    <main class="main-wrapper">
+        <!-- Background Fading Graphic Overlay -->
+        <div class="bg-fade-graphic"></div>
+
+        <!-- 1. Welcome Section -->
+        <section id="welcome" class="tab-content active">
+            <div class="hero-layout">
+                <div class="hero-text">
+                    <h1 class="hero-title">Maverick Salazar</h1>
+                    <p class="hero-subtitle">Undergraduate IT student and software developer specializing in robust logic systems, relational database normalization, and minimalist tech-savvy user interface design.</p>
+                    <div class="status-badge">
+                        <span class="status-dot"></span> Available for projects & collaborations
+                    </div>
+                </div>
+                
+                <!-- Side Circle Image & College Info Card -->
+                <div class="hero-profile-card">
+                    <div class="profile-pic-container">
+                        <img src="https://lh3.googleusercontent.com/d/1XfViSK2hIELVsCVikuoy8YxRYHafLoWS=s800" alt="Maverick Salazar">
+                    </div>
+                    <div class="profile-class-badge">IT21B</div>
+                    <div class="profile-school">ACLC College of Mandaue</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Me Section -->
+        <section id="about" class="tab-content">
+            <h2 class="section-title">About Me</h2>
+            <p class="section-desc">
+                Hello! I am Maverick Patalinghug Salazar, an ambitious undergraduate student currently pursuing a Bachelor of Science in Information Technology (BSIT) at ACLC College of Mandaue. 
+                My technical journey revolves around building high-performance software, constructing structured database architectures up to advanced normalization forms, and crafting clean, responsive, and functional user interfaces. 
+                Whether I am writing complex Java programs, configuring network data paths, or designing seamless web layouts, I am constantly driven by a commitment to clean code principles, efficient development workflows, and solving real-world computational challenges.
+            </p>
+
+            <h2 class="section-title" style="margin-top: 2rem;">Technologies & Tools</h2>
+            <div class="skills-grid">
+                <span class="skill-tag">HTML5 / CSS3</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">MariaDB / SQL</span>
+                <span class="skill-tag">VS Code</span>
+                <span class="skill-tag">Git & GitHub</span>
+                <span class="skill-tag">Cisco Packet Tracer</span>
+                <span class="skill-tag">Figma Prototyping</span>
+            </div>
+        </section>
+
+        <!-- 3. Achievements Section -->
+        <section id="achievements" class="tab-content">
+            <h2 class="section-title">Featured Work & Achievements</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Event Catering & Bulk Food Order Management System</h3>
+                    <p>Engineered a comprehensive, production-ready Java desktop application equipped with secure multi-role user authentication protocols, custom package selection logic, and highly optimized relational database integration to streamline large-scale commercial ordering workflows.</p>
+                </div>
+                <div class="card">
+                    <h3>GovExpress / CivicPass Mobile UI Prototype</h3>
+                    <p>Formulated an interactive high-fidelity mobile prototype and usability testing framework for a government service portal. Focused heavily on human-computer interaction principles, accessibility guidelines, and intuitive navigation flows for civic permit applications.</p>
+                </div>
+                <div class="card">
+                    <h3>Cybersecurity Literacy & Vulnerability Prospectus</h3>
+                    <p>Authored a rigorous quantitative research study investigating technical literacy gaps, social engineering vectors, and phishing susceptibility across student demographics, providing actionable data frameworks to bolster campus cyber defenses.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Contacts & Profiles Section -->
+        <section id="contact" class="tab-content">
+            <h2 class="section-title">Contact & Location</h2>
+            <p class="section-desc">Based in Lapu-Lapu City, Philippines. Feel free to reach out directly via email or check out my live code repositories and social channels below.</p>
+
+            <div class="card" style="margin-bottom: 2rem; max-width: 500px;">
+                <h3>Direct Email Contact</h3>
+                <p style="margin-top: 0.5rem;"><a href="mailto:salazarmaverick90@gmail.com" style="color: var(--accent-color); text-decoration: none; font-weight: 600; font-family: monospace; font-size: 1.1rem;">salazarmaverick90@gmail.com</a></p>
+            </div>
+
+            <h2 class="section-title">Profiles & Socials</h2>
+            <div class="social-grid">
+                <a href="https://github.com/salazarmaverick90" target="_blank" rel="noopener noreferrer" class="social-button">GitHub Repository</a>
+                <a href="https://www.facebook.com/maverick.salazar.2024/" target="_blank" rel="noopener noreferrer" class="social-button">Facebook Profile</a>
+                <a href="https://www.instagram.com/lux20_20/" target="_blank" rel="noopener noreferrer" class="social-button">Instagram</a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>
